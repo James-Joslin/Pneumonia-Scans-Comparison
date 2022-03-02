@@ -1,0 +1,8 @@
+*chest_xray/test/NORMAL/
+*chest_xray/test/PNEUMONIA/
+*chest_xray/train/NORMAL/
+*chest_xray/train/PNEUMONIA/
+*chest_xray/val/NORMAL/
+*chest_xray/val/PNEUMONIA/
+*chest_xray/PostModel_Images/NORMAL/
+*chest_xray/PostModel_Images/PNEUMONIA/
