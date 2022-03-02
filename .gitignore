@@ -6,3 +6,6 @@
 *chest_xray/val/PNEUMONIA/
 *chest_xray/PostModel_Images/NORMAL/
 *chest_xray/PostModel_Images/PNEUMONIA/
+
+*.png
+*.jpeg

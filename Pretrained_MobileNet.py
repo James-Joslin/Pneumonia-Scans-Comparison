@@ -9,7 +9,7 @@ val_dir = './/chest_xray/val'
 
 IMG_HEIGHT = 224
 IMG_WIDTH = 224
-BATCH_SIZE = 32
+BATCH_SIZE = 128
 
 train_datagen, test_datagen, val_datagen = dataGenerators()
 train_data, test_data, val_data = loadImageData(
