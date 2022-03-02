@@ -40,7 +40,8 @@ def yes_or_no(question):
                 return yes_or_no(question)
 
 def dataGenerators ():
-    from tensorflow.keras.preprocessing.image import ImageDataGenerator
+    from tensorflow import keras
+    from keras.preprocessing.image import ImageDataGenerator
     train_datagen = ImageDataGenerator(
         rescale=1./255,
         rotation_range=20,
@@ -143,7 +144,8 @@ def modelAccuracy(data, model_In, save_name, time):
     Acc_File.close()
 
 def load_model(model_name = ""):
-    from tensorflow.keras.models import model_from_json
+    from tensorflow import keras
+    from keras.models import model_from_json
     from colorama import Fore, Style
     import h5py
     print(Fore.CYAN + Style.BRIGHT + "Loading Precomputed Model")

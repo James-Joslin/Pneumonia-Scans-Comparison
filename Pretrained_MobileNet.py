@@ -1,4 +1,6 @@
 import tensorflow as tf
+from tensorflow import keras
+from keras.applications import mobilenet_v2 as net
 import time
 from External_Functions import dataGenerators, detect_tf_hardware, loadImageData, modelAccuracy, save_model, step_decay_schedule
 
@@ -18,12 +20,14 @@ train_data, test_data, val_data = loadImageData(
     height=IMG_HEIGHT, width=IMG_WIDTH, train_directory=train_dir,
     test_directory=test_dir, validation_directory=val_dir, batch=BATCH_SIZE)
 
-mobilenet = tf.keras.applications.MobileNetV2(
+
+mobilenet = net.MobileNetV2(
     input_shape=(IMG_HEIGHT, IMG_WIDTH, 3),
     include_top=False,
     weights='imagenet',
     pooling='avg',
 )
+
 mobilenet.trainable = False
 inputs = tf.keras.Input(shape=(IMG_HEIGHT, IMG_WIDTH, 3))
 pretrained_model = mobilenet(inputs, training=False)
@@ -42,7 +46,7 @@ model.compile(
         tf.keras.metrics.AUC(name='auc')
     ]
 )
-lr_sched = step_decay_schedule(initial_lr=1e-3, decay_factor=0.5, step_size=3)
+lr_sched = step_decay_schedule(initial_lr=1e-3, decay_factor=0.75, step_size=3)
 history = model.fit(
     train_data,
     validation_data=val_data,
@@ -51,7 +55,7 @@ history = model.fit(
     callbacks=[
         tf.keras.callbacks.EarlyStopping(
             monitor='val_loss',
-            patience=4,
+            patience=6,
             restore_best_weights=True
         ),
         lr_sched
