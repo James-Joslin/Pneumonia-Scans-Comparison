@@ -1,0 +1,5 @@
+Accuracy: 0.87
+AUC: 0.96
+Precision: 0.62
+Recall: 0.72
+Compile Time: 1108.1031427383423

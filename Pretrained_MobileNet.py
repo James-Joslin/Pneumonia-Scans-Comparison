@@ -1,4 +1,5 @@
 import tensorflow as tf
+import time
 from External_Functions import dataGenerators, detect_tf_hardware, loadImageData, modelAccuracy, save_model, step_decay_schedule
 
 detect_tf_hardware()
@@ -32,6 +33,7 @@ model = tf.keras.Model(inputs, outputs)
 print(model.summary())
 
 EPOCHS = 50
+start_time = time.time()
 model.compile(
     optimizer='adam',
     loss='binary_crossentropy',
@@ -40,7 +42,7 @@ model.compile(
         tf.keras.metrics.AUC(name='auc')
     ]
 )
-lr_sched = step_decay_schedule(initial_lr=1e-3, decay_factor=0.75, step_size=3)
+lr_sched = step_decay_schedule(initial_lr=1e-3, decay_factor=0.5, step_size=3)
 history = model.fit(
     train_data,
     validation_data=val_data,
@@ -49,11 +51,12 @@ history = model.fit(
     callbacks=[
         tf.keras.callbacks.EarlyStopping(
             monitor='val_loss',
-            patience=3,
+            patience=4,
             restore_best_weights=True
         ),
         lr_sched
     ]
 )
+Duration = time.time() - start_time
 save_model(model_In=model, save_name="Pretrained_ImageNet")
-modelAccuracy(data = test_data, model_In=model)
+modelAccuracy(data = test_data, model_In=model, save_name="MobileNet_Performance", time = Duration)

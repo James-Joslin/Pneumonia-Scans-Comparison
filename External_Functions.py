@@ -5,7 +5,7 @@ def detect_tf_hardware():
     if GPU > 0:
         my_devices = tf.config.experimental.list_physical_devices(device_type='GPU')
         tf.config.experimental.set_visible_devices(devices= my_devices, device_type='GPU')
-        print("Utilising GPU, make sure your batch size is large enough to take advantage of GOU acceleration")
+        print("Utilising GPU")
     else:
         my_devices = tf.config.experimental.list_physical_devices(device_type='CPU')
         tf.config.experimental.set_visible_devices(devices= my_devices, device_type='CPU')
@@ -102,7 +102,7 @@ def save_model(model_In, save_name = ""):
     model_In.save_weights("./Saved_Models/{}.h5".format(save_name))
     print("Saved model to disk")
 
-def modelAccuracy(data, model_In):
+def modelAccuracy(data, model_In, save_name, time):
     import numpy as np
     from sklearn.metrics import confusion_matrix
     import matplotlib.pyplot as plt
@@ -128,10 +128,19 @@ def modelAccuracy(data, model_In):
 
     precision = tp / (tp + fp)
     recall = tp / (tp + fn)
-    print("Accuracy: {:.2f}".format(accuracy))
-    print("AUC: {:.2f}".format(auc))
-    print("Precision: {:.2f}".format(precision))
-    print("Recall: {:.2f}".format(recall))
+    Acc_Metrics = [
+        "Accuracy: {:.2f}".format(accuracy),
+        "AUC: {:.2f}".format(auc),
+        "Precision: {:.2f}".format(precision),
+        "Recall: {:.2f}".format(recall),
+        "Compile Time: {} Seconds". format(time)
+    ]
+    for metric in Acc_Metrics:
+        print(metric)
+    with open("./Saved_Models/{}.txt".format(save_name), "w") as Acc_File:
+        for metric in Acc_Metrics:
+            Acc_File.write(metric + "\n")
+    Acc_File.close()
 
 def load_model(model_name = ""):
     from tensorflow.keras.models import model_from_json
